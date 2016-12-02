@@ -1,74 +1,81 @@
 package day1202;
 
+/*
+	Class ¼³¸í
+	- Block : ºí·ÏÀÇ XÁÂÇ¥ YÁÂÇ¥ÀÇ Á¤º¸¸¦ °¡Áö°í ÀÖ´Â ºí·Ï Å¬·¡½º.
+	- Item : ºí·ÏÀ» °¡Áö°í Å×Æ®¸®½º ¾ÆÀÌÅÛ(¸ð¾ç) À» ¸¸µç´Ù. (ºÎ¸ðÅ¬·¡½º)
+	- Rect, OneThree, ThreeOne ... : ItemÅ¬·¡½º¸¦ »ó¼Ó¹Þ¾Æ °¢ºí·ÏÀ§Ä¡Á¤º¸¸¦ ¼ÂÆÃÇÑ´Ù.
+*/
+
 import java.awt.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
-//ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½
+//ºí·Ï Å¬·¡½º
 class Block
 {
 	private int x;
 	private int y;
-	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	//»ý¼ºÀÚ
 	public Block(){
 	}
 	public Block(int x, int y){
 		this.x = x;
 		this.y = y;
 	}
-	//ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½Å­ ï¿½ï¿½ï¿½ï¿½
+	//ÇØ´ç Æ÷ÀÎÆ®¸ÀÅ­ °¨»ê
 	public void move(int xPlus, int yPlus){
 		this.x += xPlus;
 		this.y += yPlus;
 	}
-	//Xï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½È¯
+	//XÆ÷ÀÎÆ® ¹ÝÈ¯
 	public int getX(){
 		return this.x;
 	}
-	//Yï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½È¯
+	//YÆ÷ÀÎÆ® ¹ÝÈ¯
 	public int getY(){
 		return this.y;
 	}
-	//ï¿½Ú½ï¿½ ï¿½ï¿½È¯
+	//ÀÚ½Å ¹ÝÈ¯
 	public Block getBlock(){
 		return this;
 	}
-	//XYï¿½ï¿½ï¿½ï¿½
+	//XY¼ÂÆÃ
 	public void setXY(int x, int y){
 		this.x = x;
 		this.y = y;
 	}
 }
 
-//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½
+//¾ÆÀÌÅÛ Å¬·¡½º
 public class Item 
 {
-	JPanel[] panel;		//ï¿½Ç³ï¿½
-	Block[] block;		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
-	Block[][] block_info;		//ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½
-	//ï¿½ï¿½ï¿½Ç¹è¿­ 0~3 ï¿½ï¿½ï¿½ï¿½ 0-0ï¿½ï¿½ 1-90ï¿½ï¿½ 2-180ï¿½ï¿½ 3-270ï¿½ï¿½
-	//ï¿½ï¿½ï¿½ï¿½ ï¿½è¿­ï¿½ï¿½ ï¿½Ç³ï¿½ ï¿½ï¿½ï¿½ï¿½
+	JPanel[] panel;		//ÆÇ³Ú
+	Block[] block;		//ÇöÀçÆ÷ÀÎÆ®
+	Block[][] block_info;		//°¢ °¢µµº° Æ÷ÀÎÆ®Á¤º¸
+	//¾ÕÀÇ¹è¿­ 0~3 °¢µµ 0-0µµ 1-90µµ 2-180µµ 3-270µµ
+	//µÚÀÇ ¹è¿­Àº ÆÇ³Ú °¹¼ö
 	Block currentXY;
-	int cnt;				//ï¿½ï¿½ï¿½Ç³Ú°ï¿½ï¿½ï¿½
-	int angle;				//ï¿½Ñ°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-	int current_angle;		//ï¿½ï¿½ï¿½ç°¢ï¿½ï¿½ï¿½ï¿½
-	int xCnt;				//ï¿½ï¿½ï¿½Î°ï¿½
+	int cnt;				//ÃÑÆÇ³Ú°³¼ö
+	int angle;				//ÃÑ°¢µµ°³¼ö
+	int current_angle;		//ÇöÀç°¢µµ°ª
+	int xCnt;				//°¡·Î°ª
 
-	Color color;		//ï¿½ï¿½
-	int area;			//ï¿½ï¿½ï¿½ï¿½
+	Color color;		//»ö
+	int area;			//³ÐÀÌ
 	
 	public Item(int area, int angle, int cnt, int xCnt){
 		this.angle = angle;
 		this.cnt = cnt;
-		this.panel = new JPanel[cnt];				//ï¿½Ç³Ú°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
-		this.block = new Block[cnt];				//ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
-		this.block_info = new Block[angle][cnt];	//ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		this.panel = new JPanel[cnt];				//ÆÇ³Ú°³¼ö ¼ÂÆÃ
+		this.block = new Block[cnt];				//Æ÷ÀÎÆ® ¼ÂÆÃ
+		this.block_info = new Block[angle][cnt];	//Æ÷ÀÎÆ® °¢µµ, °³¼ö¼ÂÆÃ
 		this.area = area;									
-		this.currentXY = new Block(0,0);			//ï¿½ï¿½ï¿½ç°ª
+		this.currentXY = new Block(0,0);			//ÇöÀç°ª
 		this.xCnt = xCnt;
 
-		for (int i=0; i<cnt; i++){			//ï¿½Ð³Î»ï¿½ï¿½ï¿½
+		for (int i=0; i<cnt; i++){			//ÆÐ³Î»ý¼º
 			this.panel[i] = new JPanel();
 		}
 	}
@@ -76,17 +83,17 @@ public class Item
 		this.current_angle = (int)(Math.random() * this.angle);
 		this.block = this.block_info[this.current_angle];
 	}
-	//ï¿½ï¿½ï¿½ï¿½ï¿½Ì³Ê¿ï¿½ ï¿½ï¿½ï¿½
+	//ÄÁÅ×ÀÌ³Ê¿¡ µî·Ï
 	public void setItem(Container c){
 		for (int i=0; i<panel.length; i++){
-			panel[i].setBackground(this.color);		//ï¿½ï¿½ï¿½ï¿½
-			panel[i].setSize(area, area);			//ï¿½ï¿½ï¿½ï¿½
-			panel[i].setLocation(((block[i].getX()) * area)-100, ((block[i].getY()) * area)-100);	//ï¿½âº»ï¿½ï¿½Ä¡ ï¿½Èºï¿½ï¿½Ì´Â°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+			panel[i].setBackground(this.color);		//¹è°æ»ö
+			panel[i].setSize(area, area);			//³ÐÀÌ
+			panel[i].setLocation(((block[i].getX()) * area)-100, ((block[i].getY()) * area)-100);	//±âº»À§Ä¡ ¾Èº¸ÀÌ´Â°÷¿¡ »ý¼º
 			panel[i].setBorder(new SoftBevelBorder(BevelBorder.RAISED));
-			c.add(panel[i]);	//ï¿½ï¿½ï¿½ï¿½ï¿½Ì³Ê¿ï¿½ ï¿½ï¿½ï¿½
+			c.add(panel[i]);	//ÄÁÅ×ÀÌ³Ê¿¡ µî·Ï
 		}
 	}
-	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½
+	//´ÙÀ½À§Ä¡Á¶Á¤
 	public void setNextLocation(){
 		for (int i=0; i<panel.length; i++){
 			int x = block[i].getX() + (xCnt-3);
@@ -95,7 +102,7 @@ public class Item
 		}
 		this.currentXY.setXY((xCnt-3),1);
 	}
-	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½
+	//½ÃÀÛÀ§Ä¡Á¶Á¤
 	public void setDefaultLocation(){
 		for (int i=0; i<panel.length; i++){
 			int x = block[i].getX() + (int)(xCnt/2-2);
@@ -104,21 +111,21 @@ public class Item
 		}
 		this.currentXY.setXY((int)(xCnt/2-2),2);
 	}
-	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½
+	//´ë±â»óÅÂ À§Ä¡Á¶Á¤
 	public void setReadyLocation(){
 		for (int i=0; i<panel.length; i++){
 			panel[i].setLocation(((block[i].getX()) * area)-100, ((block[i].getY()) * area)-100);
 		}
 	}
-	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½
+	//ÇöÀçÀ§Ä¡Á¶Á¤
 	public void setCurrentXY(int x, int y){
 		this.currentXY.move(x,y);
 	}
-	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¡ï¿½ï¿½È¯
+	//ÇöÀçÀ§Ä¡¹ÝÈ¯
 	public Block getCurrentXY(){
 		return this.currentXY;
 	}
-	//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
+	//ÇöÀç Æ÷ÀÎÆ® ¸®ÅÏ
 	public Block[] getBlock(){
 		Block[] temp = new Block[cnt];
 		for (int i=0; i<block.length; i++){
@@ -128,12 +135,12 @@ public class Item
 		}
 		return temp;
 	}
-	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
+	//´ÙÀ½¿òÁ÷ÀÏ°¢µµÀÇ Æ÷ÀÎÆ®Á¤º¸ ¹ÝÈ¯
 	public Block[] getNextBlock(){
 		int nextAngle;
-		if(this.angle==1)	return getBlock();	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1ï¿½ï¿½ï¿½ï¿½ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½
-		else if(this.angle-1 == this.current_angle)	nextAngle=0;	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ±ï¿½ï¿½Ì¸ï¿½ 1ï¿½ï¿½ï¿½Þ±Û·ï¿½
-		else	nextAngle=this.current_angle+1;	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+		if(this.angle==1)	return getBlock();	//°¢µµ°¡1°³»ÓÀÌ¸é ¸®ÅÏ
+		else if(this.angle-1 == this.current_angle)	nextAngle=0;	//¸¶Áö¸·¾Þ±ÛÀÌ¸é 1¹ø¾Þ±Û·Î
+		else	nextAngle=this.current_angle+1;	//´ÙÀ½°¢µµ ¼ÂÆÃ
 		
 		Block[] temp = new Block[cnt];
 		for (int i=0; i<block.length; i++){
@@ -143,14 +150,14 @@ public class Item
 		}
 		return temp;
 	}
-	//ï¿½ï¿½ï¿½ï¿½Þ±Û¸ï¿½ï¿½ï¿½
+	//ÇöÀç¾Þ±Û¸®ÅÏ
 	public int getCurrentAngle(){
 		return this.current_angle;
 	}
-	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
+	//·ÎÅ×ÀÌÆ®
 	public void moveRotate(){
-		if(this.angle==1)	return;	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1ï¿½ï¿½ï¿½ï¿½ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½
-		if(this.current_angle+1 == this.angle){	//ï¿½Ö°ï¿½ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		if(this.angle==1)	return;	//°¢µµ°¡1°³»ÓÀÌ¸é ¸®ÅÏ
+		if(this.current_angle+1 == this.angle){	//ÃÖ°í°¢µµ¸é Ã³À½°¢µµ·Î
 			this.block = this.block_info[0];
 			this.current_angle = 0;
 		}else{
@@ -159,35 +166,35 @@ public class Item
 		}
 		this.setMove();
 	}
-	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ç³Ú¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
+	//ÇöÀçÀÇ Æ÷ÀÎÆ® Á¤º¸¸¦ ÆÇ³Ú¿¡ Àû¿ëÇÏ¿© ¿òÁ÷¿©¶ó 
 	public void setMove(){
 		for (int i=0; i<panel.length; i++){
-			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ x,yï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½x,yï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ñ°ï¿½ï¿½ï¿½ ï¿½ï¿½areaï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ñ´ï¿½.
+			//ÇöÀçºí·ÏÀÇ x,y°ª¿¡ ÇöÀçx,yÆ÷ÀÎÆ®°ªÀ» ´õÇÑ°ªÀ» °¢area°ª°ú °öÇÑ´Ù.
 			int x = this.block[i].getX() + this.currentXY.getX();
 			int y = this.block[i].getY() + this.currentXY.getY();;
 			panel[i].setLocation(x * area, y * area);
 		}
 	}
-	//ï¿½Æ·ï¿½ï¿½ï¿½ ï¿½ï¿½Ä­ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	//¾Æ·¡·Î ÇÑÄ­ ¿òÁ÷ÀÓ
 	public void moveDown(){
 		this.currentXY.move(0,1);		
 		this.setMove();
 	}
-	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä­ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	//¿À¸¥ÂÊÀ¸·Î ÇÑÄ­ ¿òÁ÷ÀÓ
 	public void moveRight(){
 		this.currentXY.move(1,0);
 		this.setMove();
 	}
-	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä­ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	//¿ÞÂÊÀ¸·Î ÇÑÄ­ ¿òÁ÷ÀÓ
 	public void moveLeft(){
 		this.currentXY.move(-1,0);		
 		this.setMove();
 	}
-	//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	//ÇöÀç »ö ¸®ÅÏ
 	public Color getColor(){
 		return this.color;
 	}
-	//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	//ÇöÀç »ö ¼ÂÆÃ
 	public void setColor(Color c){
 		this.color = c;
 		for (int i=0; i<panel.length; i++){
@@ -200,27 +207,27 @@ public class Item
 
 
 
-//ï¿½ç°¢ï¿½ï¿½ 
+//»ç°¢Çü 
 class Rect extends Item
 {
 	public Rect(int area, Container con, int xCnt){
-		super(area, 1, 4, xCnt);	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½Ç³Ú°ï¿½ï¿½ï¿½
+		super(area, 1, 4, xCnt);	//¿µ¿ª±æÀÌ, °¢µµ°¹¼ö, ÆÇ³Ú°³¼ö
 
 		block_info[0][0] = new Block(0,0);
 		block_info[0][1] = new Block(0,1);
 		block_info[0][2] = new Block(1,0);
 		block_info[0][3] = new Block(1,1);
 
-		this.setDefaultRandom();	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-		this.setItem(con);			//ï¿½ï¿½ï¿½ï¿½ï¿½Ì³Ê¿ï¿½ ï¿½ï¿½ï¿½
+		this.setDefaultRandom();	//·£´ý¼ÂÆÃ
+		this.setItem(con);			//ÄÁÅ×ÀÌ³Ê¿¡ µî·Ï
 	}
 }
 
-//ï¿½ï¿½ï¿½ï¿½ï¿½
+//±â¾ïÀÚ
 class OneThree extends Item
 {
 	public OneThree(int area, Container con, int xCnt){
-		super(area, 4, 4, xCnt);	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½Ç³Ú°ï¿½ï¿½ï¿½
+		super(area, 4, 4, xCnt);	//¿µ¿ª±æÀÌ, °¢µµ°¹¼ö, ÆÇ³Ú°³¼ö
 
 		block_info[0][0] = new Block(0,0);
 		block_info[0][1] = new Block(0,1);
@@ -242,16 +249,16 @@ class OneThree extends Item
 		block_info[3][2] = new Block(0,1);
 		block_info[3][3] = new Block(0,2);
 
-		this.setDefaultRandom();	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-		this.setItem(con);			//ï¿½ï¿½ï¿½ï¿½ï¿½Ì³Ê¿ï¿½ ï¿½ï¿½ï¿½
+		this.setDefaultRandom();	//·£´ý¼ÂÆÃ
+		this.setItem(con);			//ÄÁÅ×ÀÌ³Ê¿¡ µî·Ï
 	}
 }
 
-//ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ý´ï¿½
+//±â¾ïÀÚ ¹Ý´ë
 class ThreeOne extends Item
 {
 	public ThreeOne(int area, Container con, int xCnt){
-		super(area, 4, 4, xCnt);	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½Ç³Ú°ï¿½ï¿½ï¿½
+		super(area, 4, 4, xCnt);	//¿µ¿ª±æÀÌ, °¢µµ°¹¼ö, ÆÇ³Ú°³¼ö
 
 		block_info[0][0] = new Block(0,1);
 		block_info[0][1] = new Block(0,0);
@@ -273,16 +280,16 @@ class ThreeOne extends Item
 		block_info[3][2] = new Block(1,1);
 		block_info[3][3] = new Block(1,2);
 
-		this.setDefaultRandom();	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-		this.setItem(con);			//ï¿½ï¿½ï¿½ï¿½ï¿½Ì³Ê¿ï¿½ ï¿½ï¿½ï¿½
+		this.setDefaultRandom();	//·£´ý¼ÂÆÃ
+		this.setItem(con);			//ÄÁÅ×ÀÌ³Ê¿¡ µî·Ï
 	}
 }
 
-//ï¿½ï¿½ï¿½ï¿½
+//ÀÏÀÚ
 class LineBlock extends Item
 {
 	public LineBlock(int area, Container con, int xCnt){
-		super(area, 2, 4, xCnt);	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½Ç³Ú°ï¿½ï¿½ï¿½
+		super(area, 2, 4, xCnt);	//¿µ¿ª±æÀÌ, °¢µµ°¹¼ö, ÆÇ³Ú°³¼ö
 
 		block_info[0][0] = new Block(0,-1);
 		block_info[0][1] = new Block(0,0);
@@ -294,16 +301,16 @@ class LineBlock extends Item
 		block_info[1][2] = new Block(1,0);
 		block_info[1][3] = new Block(2,0);
 
-		this.setDefaultRandom();	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-		this.setItem(con);			//ï¿½ï¿½ï¿½ï¿½ï¿½Ì³Ê¿ï¿½ ï¿½ï¿½ï¿½
+		this.setDefaultRandom();	//·£´ý¼ÂÆÃ
+		this.setItem(con);			//ÄÁÅ×ÀÌ³Ê¿¡ µî·Ï
 	}
 }
 
-//ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½~ ï¿½ï¿½ï¿½ï¿½
+//¦º ¿ä¸ð¾ç~ ¤»¤»
 class Triangle extends Item
 {
 	public Triangle(int area, Container con, int xCnt){
-		super(area, 4, 4, xCnt);	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½Ç³Ú°ï¿½ï¿½ï¿½
+		super(area, 4, 4, xCnt);	//¿µ¿ª±æÀÌ, °¢µµ°¹¼ö, ÆÇ³Ú°³¼ö
 
 		block_info[0][0] = new Block(1,0);
 		block_info[0][1] = new Block(0,1);
@@ -325,16 +332,16 @@ class Triangle extends Item
 		block_info[3][2] = new Block(1,1);
 		block_info[3][3] = new Block(1,2);
 
-		this.setDefaultRandom();	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-		this.setItem(con);			//ï¿½ï¿½ï¿½ï¿½ï¿½Ì³Ê¿ï¿½ ï¿½ï¿½ï¿½
+		this.setDefaultRandom();	//·£´ý¼ÂÆÃ
+		this.setItem(con);			//ÄÁÅ×ÀÌ³Ê¿¡ µî·Ï
 	}
 }
 
-//_|- ï¿½ï¿½ï¿½ï¿½? ï¿½ï¿½ï¿½ï¿½
+//_|- ¿ä¸ð¾ç? ¤»¤»
 class RightBlock extends Item
 {
 	public RightBlock(int area, Container con, int xCnt){
-		super(area, 2, 4, xCnt);	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½Ç³Ú°ï¿½ï¿½ï¿½
+		super(area, 2, 4, xCnt);	//¿µ¿ª±æÀÌ, °¢µµ°¹¼ö, ÆÇ³Ú°³¼ö
 
 		block_info[0][0] = new Block(0,0);
 		block_info[0][1] = new Block(0,1);
@@ -346,16 +353,16 @@ class RightBlock extends Item
 		block_info[1][2] = new Block(0,1);
 		block_info[1][3] = new Block(-1,1);
 
-		this.setDefaultRandom();	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-		this.setItem(con);			//ï¿½ï¿½ï¿½ï¿½ï¿½Ì³Ê¿ï¿½ ï¿½ï¿½ï¿½
+		this.setDefaultRandom();	//·£´ý¼ÂÆÃ
+		this.setItem(con);			//ÄÁÅ×ÀÌ³Ê¿¡ µî·Ï
 	}
 }
 
-//-|_ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+//-|_ ¿ä¸ð¾ç ¤»¤»¤»
 class LeftBlock extends Item
 {
 	public LeftBlock(int area, Container con, int xCnt){
-		super(area, 2, 4, xCnt);	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½Ç³Ú°ï¿½ï¿½ï¿½
+		super(area, 2, 4, xCnt);	//¿µ¿ª±æÀÌ, °¢µµ°¹¼ö, ÆÇ³Ú°³¼ö
 
 		block_info[0][0] = new Block(0,0);
 		block_info[0][1] = new Block(1,0);
@@ -367,7 +374,7 @@ class LeftBlock extends Item
 		block_info[1][2] = new Block(1,0);
 		block_info[1][3] = new Block(1,-1);
 
-		this.setDefaultRandom();	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-		this.setItem(con);			//ï¿½ï¿½ï¿½ï¿½ï¿½Ì³Ê¿ï¿½ ï¿½ï¿½ï¿½
+		this.setDefaultRandom();	//·£´ý¼ÂÆÃ
+		this.setItem(con);			//ÄÁÅ×ÀÌ³Ê¿¡ µî·Ï
 	}
 }

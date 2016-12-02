@@ -6,31 +6,31 @@ import javax.swing.*;
 import javax.swing.border.*;
 import java.util.*;
 
-//ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½~
+//Å×Æ®¸®½º °ÔÀÓ~
 public class Tetris extends JFrame implements Runnable, KeyListener
 {
-	private int width;			//ï¿½ï¿½ï¿½ï¿½
-	private int height;			//ï¿½ï¿½ï¿½ï¿½
-	private	int xCnt;			//ï¿½ï¿½ï¿½Î¹è¿­Å©ï¿½ï¿½
-	private	int yCnt;			//ï¿½ï¿½ï¿½Î¹è¿­Å©ï¿½ï¿½
-	private int area;			//ï¿½ï¿½ï¿½Î¼ï¿½ï¿½Î±ï¿½ï¿½ï¿½
-	private int time;			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	private int width;			//°¡·Î
+	private int height;			//¼¼·Î
+	private	int xCnt;			//°¡·Î¹è¿­Å©±â
+	private	int yCnt;			//¼¼·Î¹è¿­Å©±â
+	private int area;			//°¡·Î¼¼·Î±æÀÌ
+	private int time;			//ºü¸£±â
 	private boolean[][] grid;	//
-	private JPanel[][] background;	//ï¿½ï¿½ï¿½ï¿½Ç³ï¿½
-	private Container fc;		//ï¿½ï¿½ï¿½ï¿½ï¿½Ì³ï¿½
-	private Item nextItem;		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã°ï¿½
-	private Item currentItem;	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-	private ArrayList<Item> itemList;	//ï¿½ï¿½ï¿½ï¿½ï¿½Û¸ï¿½ï¿½ï¿½Æ®
-	private ArrayList<Color> colorList;	//ï¿½Ã·ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
+	private JPanel[][] background;	//¹è°æÆÇ³Ú
+	private Container fc;		//ÄÁÅ×ÀÌ³Ê
+	private Item nextItem;		//´ÙÀ½³ª¿Ã°Í
+	private Item currentItem;	//ÇöÀçÀÇ ¾ÆÀÌÅÛ
+	private ArrayList<Item> itemList;	//¾ÆÀÌÅÛ¸®½ºÆ®
+	private ArrayList<Color> colorList;	//ÄÃ·¯¸®½ºÆ®
 	private Random rnd;
-	private JPanel top, next, center;			//ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ÂºÎºï¿½
-	private boolean isKey = true;		//Å°ï¿½ï¿½ï¿½ï¿½È°ï¿½ï¿½È­ï¿½ï¿½ï¿½ï¿½
-	private final Color bgColor = Color.white;	//ï¿½ï¿½ï¿½ï¿½Ã·ï¿½
-//	public static boolean isRight = false;		//ï¿½ï¿½ï¿½ï¿½ï¿½Ê¿ï¿½ï¿½ï¿½
+	private JPanel top, next, center;			//»ó´Ü °¡¸®´ÂºÎºÐ
+	private boolean isKey = true;		//Å°º¸µåÈ°¼ºÈ­¿©ºÎ
+	private final Color bgColor = Color.white;	//¹è°æÄÃ·¯
+//	public static boolean isRight = false;		//¿À¸¥ÂÊ¿©ºÎ
 	Thread t;
 
 	public Tetris(String str){
-		//========== ï¿½âº»ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ===========
+		//========== ±âº»¼³Á¤ ¼ÂÆÃ ½ÃÀÛ ===========
 		this.setTitle(str);
 		this.xCnt = 14;
 		this.yCnt = 25;
@@ -54,9 +54,9 @@ public class Tetris extends JFrame implements Runnable, KeyListener
 		this.addKeyListener(this);
 		this.setBounds(200,200,this.width+8,this.height+13);
 
-		//========== ï¿½âº»ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ===========
+		//========== ±âº»¼³Á¤ ¼ÂÆÃ ³¡ ===========
 
-		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½ï¿½Ï±ï¿½
+		//¾ÆÀÌÅÛ Ãß°¡ÇÏ±â
 		itemList.add(new Rect(this.area, this.center, this.xCnt));
 		itemList.add(new OneThree(this.area, this.center, this.xCnt));
 		itemList.add(new ThreeOne(this.area, this.center, this.xCnt));
@@ -65,16 +65,16 @@ public class Tetris extends JFrame implements Runnable, KeyListener
 		itemList.add(new RightBlock(this.area, this.center, this.xCnt));
 		itemList.add(new LeftBlock(this.area, this.center, this.xCnt));
 
-		//ï¿½ï¿½ ï¿½ß°ï¿½
+		//»ö Ãß°¡
 		this.colorList = new ArrayList<Color>();
 		this.colorList.add(Color.red);
 		this.colorList.add(Color.blue);
 		this.colorList.add(Color.green);
 		this.colorList.add(Color.orange);
 		this.colorList.add(Color.pink);
-		this.colorList.add(new Color(170,40,150));	//ï¿½ï¿½ï¿½ï¿½
+		this.colorList.add(new Color(170,40,150));	//º¸¶ó
 
-		//ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½======
+		//»ó´Ü ¼ÂÆÃ ½ÃÀÛ======
 
 		this.top = new JPanel();
 		this.next = new JPanel();
@@ -87,9 +87,9 @@ public class Tetris extends JFrame implements Runnable, KeyListener
 		this.top.setLayout(null);
 		this.top.add(this.next);
 
-		//ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½======
+		//»ó´Ü ¼ÂÆÃ ³¡======
 
-		//ï¿½ï¿½×¶ï¿½ï¿½ï¿½ ï¿½Ð³ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ==========
+		//¹é±×¶ó¿îµå ÆÐ³Î ¼ÂÆÃ ½ÃÀÛ ==========
 		for (int i=0; i<background.length; i++){
 			for (int p=0; p<background[i].length; p++){
 				this.background[i][p] = new JPanel();
@@ -98,9 +98,9 @@ public class Tetris extends JFrame implements Runnable, KeyListener
 				this.center.add(background[i][p]);
 			}
 		}
-		//ï¿½ï¿½×¶ï¿½ï¿½ï¿½ ï¿½Ð³ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ==========
+		//¹é±×¶ó¿îµå ÆÐ³Î ¼ÂÆÃ ½ÃÀÛ ==========
 
-		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Û¼ï¿½ï¿½ï¿½
+		//¾ÆÀÌÅÛ ½ÃÀÛ¼ÂÆÃ
 		this.currentItem = itemList.get(rnd.nextInt(itemList.size()));
 		this.currentItem.setColor(this.colorList.get(this.rnd.nextInt(this.colorList.size())));
 		this.currentItem.setDefaultLocation();
@@ -113,92 +113,92 @@ public class Tetris extends JFrame implements Runnable, KeyListener
 		t = new Thread(this);
 		t.start();
 	}
-	//ï¿½Ø½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	//³Ø½ºÆ® ¾ÆÀÌÅÛ ¼ÂÆÃ
 	public void setNextItem(){
 		Item temp;
 		do{
 			temp = itemList.get(rnd.nextInt(itemList.size()));
 		}
-		while (temp==this.currentItem);		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Û°ï¿½ ï¿½ßºï¿½X
+		while (temp==this.currentItem);		//ÇöÀç¾ÆÀÌÅÛ°ú Áßº¹X
 		this.nextItem = temp;
 		this.nextItem.setColor(this.colorList.get(this.rnd.nextInt(this.colorList.size())));
-		this.nextItem.setNextLocation();	//ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½
+		this.nextItem.setNextLocation();	//À§Ä¡¼ÂÆÃ
 	}
-	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	//¾ÆÀÌÅÛ »õ·Î ³ª¿À±â ¼ÂÆÃ
 	public void setNewItem(){
 		this.currentItem = this.nextItem;
 		this.currentItem.setDefaultLocation();
 		setNextItem();
 	}
-	//ï¿½ï¿½×¶ï¿½ï¿½ï¿½ ï¿½ï¿½ Ã¤ï¿½ï¿½ï¿½
+	//¹é±×¶ó¿îµå ºí·° Ã¤¿ì±â
 	public void setBack(int x, int y, Color c){
 		this.background[x][y].setBackground(c);
 		this.background[x][y].setBorder(new SoftBevelBorder(BevelBorder.RAISED));
 		this.grid[x][y] = true;
 //		System.out.println("x="+x+", y="+y);
 	}
-	//ï¿½ï¿½×¶ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	//¹é±×¶ó¿îµå ºí·° ºñ¿ì±â
 	public void setEmptyBack(int x, int y){
 		this.background[x][y].setBorder(null);
 		this.background[x][y].setBackground(this.bgColor);
 		this.grid[x][y] = false;
 	}
-	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½×¶ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	//ÇöÀçÀÇ ºí·Ï ¹é±×¶ó¿îµå·Î º¹»ç
 	public void setCopyBlock(){
 		Block[] tempBlock = this.currentItem.getBlock();
 		for (int i=0; i<tempBlock.length; i++){
 			setBack(tempBlock[i].getX(), tempBlock[i].getY(), this.currentItem.getColor());
 		}
-		this.currentItem.setReadyLocation();	//ï¿½ï¿½ï¿½ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½Æ°ï¿½ï¿½ï¿½
+		this.currentItem.setReadyLocation();	//´ë±âÀ§Ä¡·Î µ¹¾Æ°¡±â
 	}
-	//ï¿½Ù¾ï¿½ï¿½Ö±ï¿½ Ã¼Å©
+	//ÁÙ¾ø¾Ö±â Ã¼Å©
 	public void checkLine(){
-		for (int i=0; i<grid[0].length; i++){	// i = Yï¿½ï¿½ = ROW
+		for (int i=0; i<grid[0].length; i++){	// i = Y°ª = ROW
 //			System.out.println(
 			boolean isLine = true;
-			for (int p=0; p<grid.length; p++){	// p = Xï¿½ï¿½ = Column
+			for (int p=0; p<grid.length; p++){	// p = X°ª = Column
 //				System.out.print(p+","+i+" : " + grid[p][i]);
-				if(!grid[p][i]){	//ï¿½Ï³ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ break;
+				if(!grid[p][i]){	//ÇÏ³ª¶óµµ °ø¹éÀÌ ÀÖÀ¸¸é break;
 					isLine = false;
 					break;
 				}
 			}
-			if(isLine){	//ï¿½Ù¾ï¿½ï¿½ï¿½
+			if(isLine){	//ÁÙ¾ø¾Ú
 				deleteLine(i);
-				System.out.println(i + "ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
+				System.out.println(i + "ÁÙ ¾ø¾Ú");
 			}
 		}
 	}
-	//ï¿½Ù¾ï¿½ï¿½Ö°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	//ÁÙ¾ø¾Ö°í À§¿¡°Å ÇÑÄ­¾¿ ³»¸®±â
 	public void deleteLine(int line){
 		boolean temp[] = new boolean[xCnt];
 		JPanel	tempPanel[] = new JPanel[xCnt];
 
 		
-		for (int i=line; i>0; i--){		// i = ï¿½ï¿½ = Y
-			for (int p=0; p<grid.length; p++){	// p = ï¿½ï¿½ = X
-				if(i==line){	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+		for (int i=line; i>0; i--){		// i = ÁÙ = Y
+			for (int p=0; p<grid.length; p++){	// p = ¿­ = X
+				if(i==line){	//ÇöÀçÁÙ ÅÛÇÁº¯¼ö¿¡ ÀúÀå
 					tempPanel[p] = background[p][i];
 					tempPanel[p].setLocation(p*this.area,0);
 				}
-				//ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+				//¸ðµçÁÙ ÇÑÄ­¾¿ ³»¸®±â
 				grid[p][i] = grid[p][i-1];
 				background[p][i] = background[p][i-1];
 				background[p][i].setLocation(p*this.area, i*this.area);
 			}
 		}
-		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã¸ï¿½ï¿½ï¿½
+		//¾ø¾ØÁÙ ¸ÇÀ§·Î ¿Ã¸®±â
 		for (int i=0; i<grid.length; i++){
 			background[i][0] = tempPanel[i];
 			setEmptyBack(i,0);
 		}
 	}
-	//ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ó½ï¿½
+	//ÇÁ¸°Æ®Á¤º¸Ãâ·Â ÀÓ½Ã
 	public void printInfo(){
 		Block temp = this.currentItem.getCurrentXY();
 		System.out.println("x : " + temp.getX() + ", y : " + temp.getY());
 	}
-	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½Ã¼Å© -> È¸ï¿½ï¿½
+	//¾ÆÀÌÅÛ È¸ÀüÃ¼Å© -> È¸Àü
 	public void goRotate(){
 		Block[] tempBlock = this.currentItem.getNextBlock();
 		for (int i=0; i<tempBlock.length; i++){
@@ -210,24 +210,24 @@ public class Tetris extends JFrame implements Runnable, KeyListener
 		}
 		this.currentItem.moveRotate();
 	}
-	//ï¿½ï¿½ï¿½ï¿½ï¿½Û´Ù¿ï¿½Ã¼Å© -> ï¿½Ìµï¿½
+	//¾ÆÀÌÅÛ´Ù¿îÃ¼Å© -> ÀÌµ¿
 	public boolean goDown(){
 		Block[] tempBlock = this.currentItem.getBlock();
 		for (int i=0; i<tempBlock.length; i++){
 			int x = tempBlock[i].getX();
 			int y = tempBlock[i].getY() + 1;
 			if(y+1 >= this.yCnt || this.grid[x][y]){
-				if(!this.isKey)	gameEnd();	//ï¿½ï¿½ï¿½Ó³ï¿½
-				setCopyBlock();	//ï¿½ï¿½×¶ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
-				checkLine();	//ï¿½Ù¾ï¿½ï¿½Ö±ï¿½ Ã¼Å©
-				setNewItem();	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+				if(!this.isKey)	gameEnd();	//°ÔÀÓ³¡
+				setCopyBlock();	//¹é±×¶ó¿îµåºí·° ¼ÂÆÃ
+				checkLine();	//ÁÙ¾ø¾Ö±â Ã¼Å©
+				setNewItem();	//´ÙÀ½¾ÆÀÌÅÛ ¼ÂÆÃ
 				return false;
 			}
 		}
 		this.currentItem.moveDown();
 		return true;
 	}
-	//ï¿½ï¿½ï¿½ï¿½ï¿½Û¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìµï¿½Ã¼Å© -> ï¿½Ìµï¿½
+	//¾ÆÀÌÅÛ¿À¸¥ÂÊÀÌµ¿Ã¼Å© -> ÀÌµ¿
 	public void goRight(){
 		Block[] tempBlock = this.currentItem.getBlock();
 
@@ -240,7 +240,7 @@ public class Tetris extends JFrame implements Runnable, KeyListener
 		}
 		this.currentItem.moveRight();
 	}
-	//ï¿½ï¿½ï¿½ï¿½ï¿½Û¿ï¿½ï¿½ï¿½ï¿½Ìµï¿½Ã¼Å© -> ï¿½Ìµï¿½
+	//¾ÆÀÌÅÛ¿ÞÂÊÀÌµ¿Ã¼Å© -> ÀÌµ¿
 	public void goLeft(){
 		Block[] tempBlock = this.currentItem.getBlock();
 
@@ -253,8 +253,8 @@ public class Tetris extends JFrame implements Runnable, KeyListener
 		}
 		this.currentItem.moveLeft();
 	}
-	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½ Ã¼Å© -> ï¿½ï¿½ï¿½Ö±ï¿½
-	//Å°ï¿½ï¿½ï¿½ï¿½×¼Ç¸ï¿½ï¿½ï¿½ï¿½ï¿½
+	//º®µ¹¾ø¾Ö±â Ã¼Å© -> ¾ø¾Ö±â
+	//Å°º¸µå¾×¼Ç¸®½º³Ê
 	public void keyPressed(KeyEvent e){
 		if(!this.isKey)	return;
 		switch (e.getKeyCode()){
@@ -277,23 +277,23 @@ public class Tetris extends JFrame implements Runnable, KeyListener
 	}
 	public void keyReleased(KeyEvent e){}
 	public void keyTyped(KeyEvent e){}
-	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¼Å©	
+	//°ÔÀÓÁ¾·áÃ¼Å©	
 	public void gameEnd(){
-		JOptionPane.showMessageDialog(null, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(null, "°ÔÀÓÀÌ Á¾·áµÇ¾ú½À´Ï´Ù.", "°ÔÀÓÁ¾·á", JOptionPane.ERROR_MESSAGE);
 		t.stop();
 	}
 
 
-	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	//¾²·¹µå¸ÞÀÎ
 	public void run(){
 		try
 		{
 			while(true){
 				Thread.sleep(this.time);
-				//ï¿½Ç³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¸ï¿½ Å°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½X
+				//ÆÇ³ÚÀ§ÂÊÀÌ¸é Å°¸®½º³Ê µ¿ÀÛX
 				if(this.currentItem.getCurrentXY().getY() < 3)	this.isKey = false;
 				else	this.isKey = true;
-				goDown();		//ï¿½ï¿½ï¿½ï¿½ï¿½Û¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìµï¿½
+				goDown();		//¾ÆÀÌÅÛ¹ØÀ¸·ÎÀÌµ¿
 			}
 		}
 		catch (Exception e){
@@ -303,6 +303,6 @@ public class Tetris extends JFrame implements Runnable, KeyListener
 	
 	public static void main(String[] args) 
 	{
-		new Tetris("Tetris by 1ï¿½ï¿½");
+		new Tetris("Tetris by 1Á¶");
 	}
 }
