@@ -23,29 +23,30 @@ public class Tetris extends JFrame implements Runnable, KeyListener
 	private ArrayList<Item> itemList;	//아이템리스트
 	private ArrayList<Color> colorList;	//컬러리스트
 	private Random rnd;
-	private JPanel top, next, center;			//상단 가리는부분
+	private JPanel top, next, center;			// 상단 가리는부분
 	private boolean isKey = true;		//키보드활성화여부
 	private final Color bgColor = Color.white;	//배경컬러
 //	public static boolean isRight = false;		//오른쪽여부
 	Thread t;
 
 	public Tetris(String str){
+		
 		//========== 기본설정 셋팅 시작 ===========
 		this.setTitle(str);
-		this.xCnt = 14;
-		this.yCnt = 25;
-		this.time = 500;
-		this.area = 20;
-		this.width = this.xCnt * this.area;
-		this.height = this.yCnt * this.area;
-		this.itemList = new ArrayList<Item>();
-		this.background = new JPanel[this.xCnt][this.yCnt];
-		this.grid = new boolean[this.xCnt][this.yCnt];
-		this.rnd = new Random(System.currentTimeMillis());
+		this.xCnt = 14;      // 프레임의 x 크기
+		this.yCnt = 25; 	//  프레임의 y 크기
+		this.time = 500; 	// 떨어지는 시간
+		this.area = 20;  	//  배열의 길이
+		this.width = this.xCnt * this.area;	// 배열 x 크기
+		this.height = this.yCnt * this.area;  // 배열 y 크기
+		this.itemList = new ArrayList<Item>();  // 넓이 x 크기
+		this.background = new JPanel[this.xCnt][this.yCnt]; //   배경 판넬
+		this.grid = new boolean[this.xCnt][this.yCnt];		// 바둑판모양
+		this.rnd = new Random(System.currentTimeMillis()); // 랜덤값
 
-		this.fc = this.getContentPane();
+		this.fc = this.getContentPane(); //컨테이너
 
-		this.center = new JPanel();
+		this.center = new JPanel(); // 상단 가리는부분
 		this.center.setSize(this.width, this.height);
 		this.center.setLayout(null);
 		this.center.setBackground(new Color(224,255,216));
@@ -113,6 +114,7 @@ public class Tetris extends JFrame implements Runnable, KeyListener
 		t = new Thread(this);
 		t.start();
 	}
+	
 	//넥스트 아이템 셋팅
 	public void setNextItem(){
 		Item temp;
@@ -124,12 +126,14 @@ public class Tetris extends JFrame implements Runnable, KeyListener
 		this.nextItem.setColor(this.colorList.get(this.rnd.nextInt(this.colorList.size())));
 		this.nextItem.setNextLocation();	//위치셋팅
 	}
+	
 	//아이템 새로 나오기 셋팅
 	public void setNewItem(){
 		this.currentItem = this.nextItem;
 		this.currentItem.setDefaultLocation();
 		setNextItem();
 	}
+	
 	//백그라운드 블럭 채우기
 	public void setBack(int x, int y, Color c){
 		this.background[x][y].setBackground(c);
@@ -137,12 +141,14 @@ public class Tetris extends JFrame implements Runnable, KeyListener
 		this.grid[x][y] = true;
 //		System.out.println("x="+x+", y="+y);
 	}
+	
 	//백그라운드 블럭 비우기
 	public void setEmptyBack(int x, int y){
 		this.background[x][y].setBorder(null);
 		this.background[x][y].setBackground(this.bgColor);
 		this.grid[x][y] = false;
 	}
+	
 	//현재의 블록 백그라운드로 복사
 	public void setCopyBlock(){
 		Block[] tempBlock = this.currentItem.getBlock();
@@ -151,6 +157,7 @@ public class Tetris extends JFrame implements Runnable, KeyListener
 		}
 		this.currentItem.setReadyLocation();	//대기위치로 돌아가기
 	}
+	
 	//줄없애기 체크
 	public void checkLine(){
 		for (int i=0; i<grid[0].length; i++){	// i = Y값 = ROW
@@ -167,8 +174,9 @@ public class Tetris extends JFrame implements Runnable, KeyListener
 				deleteLine(i);
 				System.out.println(i + "줄 없앰");
 			}
-		}
+		} // 전 라인값을 true로 만듬.
 	}
+	
 	//줄없애고 위에거 한칸씩 내리기
 	public void deleteLine(int line){
 		boolean temp[] = new boolean[xCnt];
@@ -181,23 +189,27 @@ public class Tetris extends JFrame implements Runnable, KeyListener
 					tempPanel[p] = background[p][i];
 					tempPanel[p].setLocation(p*this.area,0);
 				}
+				
 				//모든줄 한칸씩 내리기
 				grid[p][i] = grid[p][i-1];
 				background[p][i] = background[p][i-1];
 				background[p][i].setLocation(p*this.area, i*this.area);
 			}
 		}
+		
 		//없앤줄 맨위로 올리기
 		for (int i=0; i<grid.length; i++){
 			background[i][0] = tempPanel[i];
 			setEmptyBack(i,0);
 		}
 	}
+	
 	//프린트정보출력 임시
 	public void printInfo(){
 		Block temp = this.currentItem.getCurrentXY();
 		System.out.println("x : " + temp.getX() + ", y : " + temp.getY());
 	}
+	
 	//아이템 회전체크 -> 회전
 	public void goRotate(){
 		Block[] tempBlock = this.currentItem.getNextBlock();
@@ -210,6 +222,7 @@ public class Tetris extends JFrame implements Runnable, KeyListener
 		}
 		this.currentItem.moveRotate();
 	}
+	
 	//아이템다운체크 -> 이동
 	public boolean goDown(){
 		Block[] tempBlock = this.currentItem.getBlock();
@@ -227,6 +240,7 @@ public class Tetris extends JFrame implements Runnable, KeyListener
 		this.currentItem.moveDown();
 		return true;
 	}
+	
 	//아이템오른쪽이동체크 -> 이동
 	public void goRight(){
 		Block[] tempBlock = this.currentItem.getBlock();
@@ -240,6 +254,7 @@ public class Tetris extends JFrame implements Runnable, KeyListener
 		}
 		this.currentItem.moveRight();
 	}
+	
 	//아이템왼쪽이동체크 -> 이동
 	public void goLeft(){
 		Block[] tempBlock = this.currentItem.getBlock();
@@ -253,6 +268,7 @@ public class Tetris extends JFrame implements Runnable, KeyListener
 		}
 		this.currentItem.moveLeft();
 	}
+	
 	//벽돌없애기 체크 -> 없애기
 	//키보드액션리스너
 	public void keyPressed(KeyEvent e){
@@ -278,6 +294,7 @@ public class Tetris extends JFrame implements Runnable, KeyListener
 	public void keyReleased(KeyEvent e){}
 	public void keyTyped(KeyEvent e){}
 	//게임종료체크	
+	
 	public void gameEnd(){
 		JOptionPane.showMessageDialog(null, "게임이 종료되었습니다.", "게임종료", JOptionPane.ERROR_MESSAGE);
 		t.stop();

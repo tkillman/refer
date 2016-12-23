@@ -17,26 +17,32 @@ class Block
 {
 	private int x;
 	private int y;
+	
 	//생성자
 	public Block(){
 	}
+	
 	public Block(int x, int y){
 		this.x = x;
 		this.y = y;
 	}
-	//해당 포인트맛큼 감산
+	
+	//해당 포인트만큼 감산
 	public void move(int xPlus, int yPlus){
 		this.x += xPlus;
 		this.y += yPlus;
 	}
+	
 	//X포인트 반환
 	public int getX(){
 		return this.x;
 	}
+	
 	//Y포인트 반환
 	public int getY(){
 		return this.y;
 	}
+	
 	//자신 반환
 	public Block getBlock(){
 		return this;
@@ -56,6 +62,7 @@ public class Item
 	Block[][] block_info;		//각 각도별 포인트정보
 	//앞의배열 0~3 각도 0-0도 1-90도 2-180도 3-270도
 	//뒤의 배열은 판넬 갯수
+	
 	Block currentXY;
 	int cnt;				//총판넬개수
 	int angle;				//총각도개수
@@ -79,10 +86,12 @@ public class Item
 			this.panel[i] = new JPanel();
 		}
 	}
+	
 	public void setDefaultRandom(){
 		this.current_angle = (int)(Math.random() * this.angle);
 		this.block = this.block_info[this.current_angle];
 	}
+	
 	//컨테이너에 등록
 	public void setItem(Container c){
 		for (int i=0; i<panel.length; i++){
@@ -93,6 +102,7 @@ public class Item
 			c.add(panel[i]);	//컨테이너에 등록
 		}
 	}
+	
 	//다음위치조정
 	public void setNextLocation(){
 		for (int i=0; i<panel.length; i++){
@@ -102,6 +112,7 @@ public class Item
 		}
 		this.currentXY.setXY((xCnt-3),1);
 	}
+	
 	//시작위치조정
 	public void setDefaultLocation(){
 		for (int i=0; i<panel.length; i++){
@@ -111,20 +122,24 @@ public class Item
 		}
 		this.currentXY.setXY((int)(xCnt/2-2),2);
 	}
+	
 	//대기상태 위치조정
 	public void setReadyLocation(){
 		for (int i=0; i<panel.length; i++){
 			panel[i].setLocation(((block[i].getX()) * area)-100, ((block[i].getY()) * area)-100);
 		}
 	}
+	
 	//현재위치조정
 	public void setCurrentXY(int x, int y){
 		this.currentXY.move(x,y);
 	}
+	
 	//현재위치반환
 	public Block getCurrentXY(){
 		return this.currentXY;
 	}
+	
 	//현재 포인트 리턴
 	public Block[] getBlock(){
 		Block[] temp = new Block[cnt];
@@ -135,6 +150,7 @@ public class Item
 		}
 		return temp;
 	}
+	
 	//다음움직일각도의 포인트정보 반환
 	public Block[] getNextBlock(){
 		int nextAngle;
@@ -150,10 +166,12 @@ public class Item
 		}
 		return temp;
 	}
+	
 	//현재앵글리턴
 	public int getCurrentAngle(){
 		return this.current_angle;
 	}
+	
 	//로테이트
 	public void moveRotate(){
 		if(this.angle==1)	return;	//각도가1개뿐이면 리턴
@@ -166,6 +184,7 @@ public class Item
 		}
 		this.setMove();
 	}
+	
 	//현재의 포인트 정보를 판넬에 적용하여 움직여라 
 	public void setMove(){
 		for (int i=0; i<panel.length; i++){
@@ -175,25 +194,30 @@ public class Item
 			panel[i].setLocation(x * area, y * area);
 		}
 	}
+	
 	//아래로 한칸 움직임
 	public void moveDown(){
 		this.currentXY.move(0,1);		
 		this.setMove();
 	}
+	
 	//오른쪽으로 한칸 움직임
 	public void moveRight(){
 		this.currentXY.move(1,0);
 		this.setMove();
 	}
+	
 	//왼쪽으로 한칸 움직임
 	public void moveLeft(){
 		this.currentXY.move(-1,0);		
 		this.setMove();
 	}
+	
 	//현재 색 리턴
 	public Color getColor(){
 		return this.color;
 	}
+	
 	//현재 색 셋팅
 	public void setColor(Color c){
 		this.color = c;
@@ -203,14 +227,10 @@ public class Item
 	}
 }
 
-
-
-
-
 //사각형 
 class Rect extends Item
 {
-	public Rect(int area, Container con, int xCnt){
+	public Rect(int area, Container con, int xCnt){ 
 		super(area, 1, 4, xCnt);	//영역길이, 각도갯수, 판넬개수
 
 		block_info[0][0] = new Block(0,0);
@@ -229,21 +249,37 @@ class OneThree extends Item
 	public OneThree(int area, Container con, int xCnt){
 		super(area, 4, 4, xCnt);	//영역길이, 각도갯수, 판넬개수
 
+		 /*|
+		   |
+		   |--------*/
 		block_info[0][0] = new Block(0,0);
 		block_info[0][1] = new Block(0,1);
 		block_info[0][2] = new Block(1,1);
 		block_info[0][3] = new Block(2,1);
 
+		/*	|
+			|
+		    |
+		-----*/
+		
 		block_info[1][0] = new Block(0,2);
 		block_info[1][1] = new Block(1,2);
 		block_info[1][2] = new Block(1,1);
 		block_info[1][3] = new Block(1,0);
 
+		/*-----------
+				  |
+				  |*/
 		block_info[2][0] = new Block(2,1);
 		block_info[2][1] = new Block(2,0);
 		block_info[2][2] = new Block(1,0);
 		block_info[2][3] = new Block(0,0);
 
+		/*------
+		|
+		|
+		|*/
+		
 		block_info[3][0] = new Block(1,0);
 		block_info[3][1] = new Block(0,0);
 		block_info[3][2] = new Block(0,1);
